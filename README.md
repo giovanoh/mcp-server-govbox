@@ -1,6 +1,6 @@
 # MCP Server Govbox
 
-Um servidor MCP (Model Control Protocol) desenvolvido para facilitar a integração entre Large Language Models (LLMs) e tarefas do Rakefile do projeto Govbox.
+Um servidor MCP (Model Context Protocol) desenvolvido para facilitar a integração entre Large Language Models (LLMs) e tarefas do Rakefile do projeto Govbox.
 
 ## 📋 Sobre o Projeto
 
