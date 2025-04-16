@@ -8,18 +8,22 @@ import (
 	"strings"
 	"sync"
 
+	"github.com/giovanoh/mcp-server-govbox/internal/domain/valueobject"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
+// RakeHandler é um manipulador para executar comandos Rake.
 type RakeHandler struct {
-	path   string
+	shell  valueobject.Shell
 	action string
 }
 
-func NewRakeHandler(path, action string) *RakeHandler {
-	return &RakeHandler{path: path, action: action}
+// NewRakeHandler cria um novo manipulador para executar comandos Rake.
+func NewRakeHandler(shell valueobject.Shell, action string) *RakeHandler {
+	return &RakeHandler{shell: shell, action: action}
 }
 
+// Handle executa o comando Rake.
 func (h *RakeHandler) Handle(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 	projects, ok := request.Params.Arguments["projects"].(string)
 	if !ok {
@@ -27,8 +31,8 @@ func (h *RakeHandler) Handle(ctx context.Context, request mcp.CallToolRequest) (
 	}
 
 	projects = strings.ToLower(projects)
-	command := exec.Command("cmd.exe", "/c", fmt.Sprintf("rake %s projects=%s auto=true", h.action, projects))
-	command.Dir = h.path
+	command := exec.Command(h.shell.Shell(), h.shell.ShellArgs(), fmt.Sprintf("rake %s projects=%s auto=true", h.action, projects))
+	command.Dir = h.shell.WorkingDir()
 
 	stdout, err := command.StdoutPipe()
 	if err != nil {

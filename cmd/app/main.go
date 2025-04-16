@@ -4,6 +4,7 @@ import (
 	"log"
 	"os"
 
+	"github.com/giovanoh/mcp-server-govbox/internal/domain/valueobject"
 	"github.com/giovanoh/mcp-server-govbox/internal/web/handlers"
 	"github.com/giovanoh/mcp-server-govbox/internal/web/server"
 
@@ -16,7 +17,15 @@ func main() {
 	if err != nil {
 		log.Fatal("Error loading .env file\n", err)
 	}
-	pathGovbox := os.Getenv("PATH_GOVBOX")
+
+	shell, err := valueobject.NewShell(
+		os.Getenv("MCP_SHELL_PATH"),
+		os.Getenv("MCP_SHELL_OPTIONS"),
+		os.Getenv("MCP_GOVBOX_PROJECT_PATH"),
+	)
+	if err != nil {
+		log.Fatal("Invalid shell configuration\n", err)
+	}
 
 	toolBuild := mcp.NewTool("build_govbox",
 		mcp.WithDescription("Build a project from govbox solution"),
@@ -42,9 +51,9 @@ func main() {
 		),
 	)
 
-	buildHandler := handlers.NewRakeHandler(pathGovbox, "build:trunk")
-	uploadHandler := handlers.NewRakeHandler(pathGovbox, "build:upload_site")
-	updateDbHandler := handlers.NewRakeHandler(pathGovbox, "build:update_db")
+	buildHandler := handlers.NewRakeHandler(shell, "build:trunk")
+	uploadHandler := handlers.NewRakeHandler(shell, "build:upload_site")
+	updateDbHandler := handlers.NewRakeHandler(shell, "build:update_db")
 
 	server := server.NewServer("mcp-server-govbox", "1.0.0")
 	server.RegisterTool(&toolBuild, buildHandler)

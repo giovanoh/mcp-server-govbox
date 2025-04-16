@@ -8,11 +8,13 @@ import (
 	"github.com/mark3labs/mcp-go/server"
 )
 
+// ToolHandler representa um manipulador para um comando MCP.
 type ToolHandler struct {
 	tool    *mcp.Tool
 	handler *handlers.RakeHandler
 }
 
+// Server representa um servidor MCP.
 type Server struct {
 	name         string
 	version      string
@@ -20,6 +22,7 @@ type Server struct {
 	toolHandlers []*ToolHandler
 }
 
+// NewServer cria um novo servidor MCP.
 func NewServer(name, version string) *Server {
 	return &Server{
 		name:    name,
@@ -27,6 +30,7 @@ func NewServer(name, version string) *Server {
 	}
 }
 
+// RegisterTool registra um novo comando MCP.
 func (s *Server) RegisterTool(tool *mcp.Tool, handler *handlers.RakeHandler) {
 	s.toolHandlers = append(s.toolHandlers, &ToolHandler{
 		tool:    tool,
@@ -34,6 +38,7 @@ func (s *Server) RegisterTool(tool *mcp.Tool, handler *handlers.RakeHandler) {
 	})
 }
 
+// Start inicia o servidor MCP.
 func (s *Server) Start() {
 	s.server = server.NewMCPServer(s.name, s.version)
 	for _, toolHandler := range s.toolHandlers {
