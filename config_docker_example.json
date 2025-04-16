@@ -1,0 +1,13 @@
+{
+    "mcpServers": {
+        "mcp-server-govbox": {
+            "command": "docker",
+            "args": [
+                "run",
+                "--rm",
+                "-i",
+                "mcp-server-govbox:latest"
+            ]
+        }
+    }
+}

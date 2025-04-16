@@ -1,0 +1,7 @@
+{
+    "mcpServers": {
+        "mcp-server-govbox": {
+            "command": "/path/to/executable"
+        }
+    }
+}
