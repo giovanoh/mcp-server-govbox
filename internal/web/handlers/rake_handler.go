@@ -8,18 +8,18 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/giovanoh/mcp-server-govbox/internal/domain/valueobject"
+	"github.com/giovanoh/mcp-server-govbox/internal/config"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
 // RakeHandler é um manipulador para executar comandos Rake.
 type RakeHandler struct {
-	shell  valueobject.Shell
+	shell  config.ShellConfiguration
 	action string
 }
 
 // NewRakeHandler cria um novo manipulador para executar comandos Rake.
-func NewRakeHandler(shell valueobject.Shell, action string) *RakeHandler {
+func NewRakeHandler(shell config.ShellConfiguration, action string) *RakeHandler {
 	return &RakeHandler{shell: shell, action: action}
 }
 

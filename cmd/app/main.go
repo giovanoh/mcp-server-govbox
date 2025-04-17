@@ -4,7 +4,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/giovanoh/mcp-server-govbox/internal/domain/valueobject"
+	"github.com/giovanoh/mcp-server-govbox/internal/config"
 	"github.com/giovanoh/mcp-server-govbox/internal/web/handlers"
 	"github.com/giovanoh/mcp-server-govbox/internal/web/server"
 
@@ -18,7 +18,7 @@ func main() {
 		log.Fatal("Error loading .env file\n", err)
 	}
 
-	shell, err := valueobject.NewShell(
+	shell, err := config.NewShellConfiguration(
 		os.Getenv("MCP_SHELL_PATH"),
 		os.Getenv("MCP_SHELL_OPTIONS"),
 		os.Getenv("MCP_GOVBOX_PROJECT_PATH"),
