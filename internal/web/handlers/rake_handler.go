@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"io"
 	"os/exec"
@@ -12,6 +13,10 @@ import (
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
+var (
+	ErrInvalidAction = errors.New("action is required")
+)
+
 // RakeHandler é um manipulador para executar comandos Rake.
 type RakeHandler struct {
 	shell  config.ShellConfiguration
@@ -19,8 +24,11 @@ type RakeHandler struct {
 }
 
 // NewRakeHandler cria um novo manipulador para executar comandos Rake.
-func NewRakeHandler(shell config.ShellConfiguration, action string) *RakeHandler {
-	return &RakeHandler{shell: shell, action: action}
+func NewRakeHandler(shell config.ShellConfiguration, action string) (*RakeHandler, error) {
+	if action == "" {
+		return nil, ErrInvalidAction
+	}
+	return &RakeHandler{shell: shell, action: action}, nil
 }
 
 // Handle executa o comando Rake.
@@ -67,4 +75,14 @@ func (h *RakeHandler) Handle(ctx context.Context, request mcp.CallToolRequest) (
 	}
 
 	return mcp.NewToolResultText(fmt.Sprintf("Command completed successfully!\n\n%s", outBuffer.String())), nil
+}
+
+// Action retorna o comando Rake.
+func (h *RakeHandler) Action() string {
+	return h.action
+}
+
+// Shell retorna a configuração do shell.
+func (h *RakeHandler) Shell() config.ShellConfiguration {
+	return h.shell
 }

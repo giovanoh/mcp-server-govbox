@@ -25,8 +25,9 @@ type Server struct {
 // NewServer cria um novo servidor MCP.
 func NewServer(name, version string) *Server {
 	return &Server{
-		name:    name,
-		version: version,
+		name:         name,
+		version:      version,
+		toolHandlers: make([]*ToolHandler, 0),
 	}
 }
 
@@ -47,4 +48,19 @@ func (s *Server) Start() {
 	if err := server.ServeStdio(s.server); err != nil {
 		fmt.Printf("Server error: %v\n", err)
 	}
+}
+
+// Name retorna o nome do servidor.
+func (s *Server) Name() string {
+	return s.name
+}
+
+// Version retorna a versão do servidor.
+func (s *Server) Version() string {
+	return s.version
+}
+
+// ToolHandlers retorna os manipuladores de comandos MCP.
+func (s *Server) ToolHandlers() []*ToolHandler {
+	return s.toolHandlers
 }

@@ -1,6 +1,8 @@
 package config
 
-import "github.com/giovanoh/mcp-server-govbox/internal/domain/shellerrors"
+import (
+	"fmt"
+)
 
 // ShellConfiguration representa a configuração de um shell para execução de comandos
 type ShellConfiguration struct {
@@ -12,10 +14,10 @@ type ShellConfiguration struct {
 // NewShellConfiguration cria uma nova instância de ShellConfiguration
 func NewShellConfiguration(shell, shellArgs, workingDir string) (ShellConfiguration, error) {
 	if shell == "" {
-		return ShellConfiguration{}, shellerrors.NewErrInvalidShell("shell command cannot be empty")
+		return ShellConfiguration{}, NewErrInvalidShell("shell command cannot be empty")
 	}
 	if workingDir == "" {
-		return ShellConfiguration{}, shellerrors.NewErrInvalidShell("working directory cannot be empty")
+		return ShellConfiguration{}, NewErrInvalidShell("working directory cannot be empty")
 	}
 
 	return ShellConfiguration{
@@ -38,4 +40,21 @@ func (s ShellConfiguration) ShellArgs() string {
 // WorkingDir retorna o diretório de trabalho
 func (s ShellConfiguration) WorkingDir() string {
 	return s.workingDir
+}
+
+// ErrInvalidShell representa um erro de configuração de shell inválida.
+type ErrInvalidShell struct {
+	Message string
+}
+
+// NewErrInvalidShell cria um novo erro de configuração de shell inválida.
+func NewErrInvalidShell(message string) *ErrInvalidShell {
+	return &ErrInvalidShell{
+		Message: message,
+	}
+}
+
+// Error retorna a mensagem de erro.
+func (e *ErrInvalidShell) Error() string {
+	return fmt.Sprintf("invalid shell: %s", e.Message)
 }

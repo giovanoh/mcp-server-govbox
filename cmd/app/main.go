@@ -51,9 +51,18 @@ func main() {
 		),
 	)
 
-	buildHandler := handlers.NewRakeHandler(shell, "build:trunk")
-	uploadHandler := handlers.NewRakeHandler(shell, "build:upload_site")
-	updateDbHandler := handlers.NewRakeHandler(shell, "build:update_db")
+	buildHandler, err := handlers.NewRakeHandler(shell, "build:trunk")
+	if err != nil {
+		log.Fatal("Invalid build handler\n", err)
+	}
+	uploadHandler, err := handlers.NewRakeHandler(shell, "build:upload_site")
+	if err != nil {
+		log.Fatal("Invalid upload handler\n", err)
+	}
+	updateDbHandler, err := handlers.NewRakeHandler(shell, "build:update_db")
+	if err != nil {
+		log.Fatal("Invalid update db handler\n", err)
+	}
 
 	server := server.NewServer("mcp-server-govbox", "1.0.0")
 	server.RegisterTool(&toolBuild, buildHandler)
